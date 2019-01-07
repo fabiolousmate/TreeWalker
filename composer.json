@@ -1,5 +1,5 @@
 {
-    "name": "lukascivil/treewalker",
+    "name": "fabiolousmate/treewalker",
     "description": "TreeWalker is a simple and small Library that will help you to work faster with manipulation of structures in PHP",
     "keywords": ["JSON", "objects", "diff", "merge", "dynamically", "recursivelly", "array", "struct"],
     "license": "MIT",

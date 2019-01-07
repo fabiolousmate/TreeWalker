@@ -210,7 +210,7 @@ class TreeWalker
      * @param  [array|string|\stdClass] $struct2 [struct2]
      * @return [array|string|\stdClass] struct diff
      */
-    public function getdiff($struct1, $struct2, $slashtoobject = false)
+    public function getdiff($struct1, $struct2, $slashtoobject = false, $strict = true)
     {
         if (!$this->studyType($struct1, $problem) || !$this->studyType($struct2, $problem)) {
             return $problem;
@@ -223,7 +223,7 @@ class TreeWalker
 
         $this->structPathArray($struct1, $structpath1_array, "");
         $this->structPathArray($struct2, $structpath2_array, "");
-        $deltadiff_array = $this->structPathArrayDiff($structpath1_array, $structpath2_array, $slashtoobject);
+        $deltadiff_array = $this->structPathArrayDiff($structpath1_array, $structpath2_array, $slashtoobject, $strict);
 
         if ($this->config["debug"]) {
             $deltadiff_array["time"] = $this->clockMark();
@@ -344,9 +344,10 @@ class TreeWalker
      * @param  [array]   $structpath1_array [Vector paths of structure 1]
      * @param  [array]   $structpath2_array [Vector paths of structure 2]
      * @param  [boolean] $slashtoobject     [Simple path with slashs or nested structures]
+     * @param  [boolean] $strict            [Strict check or lazy]
      * @return [array]                      [Delta array]
      */
-    private function structPathArrayDiff($structpath1_array, $structpath2_array, $slashtoobject)
+    private function structPathArrayDiff($structpath1_array, $structpath2_array, $slashtoobject, $strict)
     {
         $deltadiff_array = array(
             "new"     => array(),
@@ -357,7 +358,7 @@ class TreeWalker
         foreach ($structpath1_array as $key1 => $value1) {
             if (array_key_exists($key1, $structpath2_array)) {
 
-                if ($value1 !== $structpath2_array[$key1]) {
+                if ($strict ? $value1 !== $structpath2_array[$key1] : $value1 != $structpath2_array[$key1]) {
 
                     $edited = array(
                         "oldvalue" => $structpath2_array[$key1],
